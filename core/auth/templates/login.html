@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Log In{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form.username.label }} {{ form.username(size=20) }}
+    {% if form.username.errors %}
+      <ul class="errors">
+      {% for error in form.username.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+
+    <!-- Password -->
+    {{ form.password.label }} {{ form.password(size=20) }}
+    {% if form.password.errors %}
+      <ul class="errors">
+      {% for error in form.password.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+
+    <!-- Remember me -->
+    <span>
+      {{ form.remember_me(size=20) }} {{ form.remember_me.label }}
+    </span>
+    {% if form.remember_me.errors %}
+      <ul class="errors">
+      {% for error in form.remember_me.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+
+
+    <input type="submit" value="Log In">
+  </form>
+{% endblock %}

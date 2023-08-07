@@ -1,0 +1,1 @@
+from landing_page.module import LandingPageModule

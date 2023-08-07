@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}{{data.name}}{% endblock %}</h1>
+  <div>Corriendo en la IP: {{data.ip_address}}</div>
+{% endblock %}
+
+{% block content %}
+  <a href="/about">About</a>
+  <a href="/printers">Go to printers</a>
+{% endblock %}

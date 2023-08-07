@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Create role{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form action="{{ url_for('admin.create_role') }}" method="POST">
+        {{ form.csrf_token }}
+
+        {{ form.name.label }} {{ form.name(size=20) }}
+        {% if form.name.errors %}
+            <ul class="errors">
+                {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {{ form.permissions.label }} {{ form.permissions(size=20) }}
+        {% if form.permissions.errors %}
+            <ul class="errors">
+                {% for error in form.permissions.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {{ form.submit() }}
+    </form>
+{% endblock %}

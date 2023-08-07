@@ -1,0 +1,15 @@
+# Environment folders
+venv/
+.idea/
+
+# Python testing folders
+__pycache__/
+build/
+dist/
+
+# Python testing files
+*.spec
+
+# Flask enviroment files
+instance/
+.env

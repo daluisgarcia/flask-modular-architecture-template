@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Bind roles with user{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('admin.bind_roles_with_user') }}" method="POST">
+    {{ form.csrf_token }}
+
+    {{ form.user.label }} {{ form.user(size=20) }}
+    {% if form.user.errors %}
+        <ul class="errors">
+            {% for error in form.user.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {{ form.roles.label }} {{ form.roles(size=20) }}
+    {% if form.roles.errors %}
+        <ul class="errors">
+            {% for error in form.roles.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {{ form.submit() }}
+</form>
+{% endblock %}

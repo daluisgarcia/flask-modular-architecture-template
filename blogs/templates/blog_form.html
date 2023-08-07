@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id="vapp">
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form.title.label }} {{ form.title() }}
+    {% if form.title.errors %}
+        <ul class="errors">
+            {% for error in form.title.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {{ form.body.label }} {{ form.body() }}
+    {% if form.body.errors %}
+        <ul class="errors">
+            {% for error in form.body.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if not hide_comments %}
+      <div>
+        <h3>Comentarios</h3>
+        <button type="button" @click="addComment">Add Comment</button>
+      </div>
+      <br>
+
+      <div v-for="(comment, index) in comments">
+        <textarea :id="'comments-'+index+'-body'" :name="'comments-'+index+'-body'" v-model="comment.body" placeholder="Comment body" required></textarea>
+        <div v-if="comment.errors">
+          <ul class="errors">
+            <li v-for="error in comment.errors" v-html="error"></li>
+          </ul>
+        </div>
+        <button type="button" @click="removeComment(index)">Remove Comment</button>
+        <hr>
+      </div>
+    {% endif %}
+
+    <hr>
+
+    {{ form.submit() }}
+  </form>
+</div>
+{% endblock %}
+
+{% set comment_js_variable = 'let comment_list = '+comments_in_json|safe %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script> {{ comment_js_variable }} </script>
+<script>
+    const vueApp = new Vue({
+        el: '#vapp',
+        data: { 
+          comments: comment_list
+        },
+        methods: {
+          addComment: function() {
+            this.comments.push({body: ''});
+          },
+          removeComment: function(index) {
+            this.comments.splice(index, 1);
+          }
+        }
+    })
+</script>
+{% endblock %}
