@@ -1,9 +1,9 @@
 # Flask Modular Architecture Template
 This is a template for a Flask project using a modular architecture. This project facilitates the creation of a Flask 
 project with a modular architecture, allowing the creation of new modules by extending a class and adding it to a set. 
-This template has some flask extension installed, such as: `flask_login`, `flask_principal` and `flask_sqlalchemy`; 
-any other extension can be installed by being added to the `core/extensions.py` file, inside the `install_extensions` 
-function. 
+This template has some flask extension installed, such as: `flask_login`, `flask_principal`, `flask_sqlalchemy` and 
+`flask_migrate`; any other extension can be installed by being added to the `core/extensions.py` file, inside the 
+`install_extensions` function. 
 
 # Project structure
 - `admin/`: An module example for an administration panel. **CAN BE EDITED OR DELETED**
@@ -22,18 +22,27 @@ To install the project package, run the following command `pip install -r requir
 # Module creation
 To create a new module, you only need to create a new folder with a `module.py` file inside it. This file must contain a
 class extending the `core.AppModule` class and implementing the `__init__` method defining the `self.bluprint` attribute 
-with the blueprint of the module and the `self.template_folder` with the path to the module's templates folder. Also, you 
-need to call the super `__init__` method with the module name as the parameter (You can see an example in `admin/module.py` file). 
+with the blueprint of the module, the `self.permission_names` attribute with at least an empty set and the `self.template_folder` 
+with the path to the module's templates folder. Also, you need to call the super `__init__` method with the module name 
+as the parameter (You can see an example in `admin/module.py` file). 
 
 To subscribe the module to the application, you need to import the module class in the `modules.py` file and add it to the
 `APP_MODULES` set in it. This will allow the application to load the module when it starts.
 
 # Project usage
 ## Setting environment variables
-Before running the project, you must create a `.env` file in the root directory of the project as a copy of `.env.example`. 
+Before running the project, you must create a `.env` file in the root directory of the project as a copy of `.env.example`.
+
+## Creating the database
+Thanks to the `flask_migrate` extension, the database can be created and updated automatically. To create the database,
+you must run the following command: `flask db migrate`. **If you make any change to the models or add a new one** you 
+must run the `flask db migrate` command again and then `flask db upgrade` to update the database.
+
+If you want to renew the database migrations, you can delete the `migrations` folder and run the `flask db init` command.
+Then you can run the `flask db migrate` command to create the database tables.
 
 ## Running the project
-To run the project you can use either the command `python app.py`
+To run the project you can use either the command `python app.py` or `flask run`
 
 # Contributing
 To contribute to this project, you can fork the repository and create a pull request with your changes. Also, you can
