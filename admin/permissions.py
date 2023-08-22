@@ -1,7 +1,7 @@
-from flask_principal import Permission, RoleNeed
+from core.permissions import AppPermission
 
 
-class ManageRolesPermission(Permission):
+class EnterAdminPanelPermission(AppPermission):
     def __init__(self):
-        need = RoleNeed('manage_user_roles')
-        super(ManageRolesPermission, self).__init__(need)
+        self.permissions_set = {'enter_admin_panel'}
+        super().__init__()

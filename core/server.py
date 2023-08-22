@@ -5,6 +5,7 @@ import jinja2
 
 from core.config import config
 from core.database import initialize_db, establish_db_connection
+from core.permissions import insert_default_permissions_and_roles
 from core.extensions import install_extensions
 
 
@@ -15,7 +16,7 @@ def create_app(test_config=None) -> Flask:
     if test_config is None:
         # load the instance config, if it exists, when not testing
         if not config:
-            raise Exception('No environment file found... Please create a .env file in the root directory of the project.')
+            raise EnvironmentError('No environment file found... Please create a .env file in the root directory of the project.')
 
         app.config.from_mapping(dict(config))
     else:
@@ -43,17 +44,21 @@ def create_app(test_config=None) -> Flask:
 
     # IMPORTING MODULES LIST
     from modules import APP_MODULES
+
+    # Creating the database connection and creating the tables
+    establish_db_connection(app)
+    app.config['DATABASE_CONNECTION'] = db_conn
+
     # Adding the auth module to the list
     from core.auth.module import AuthModule
     APP_MODULES.add(AuthModule())
     # Registering modules in the app
     for module in APP_MODULES:
         module.subscribe_blueprints(app)
+        module.insert_permissions(app)
         templates_folders = module.subscribe_templates(templates_folders)
 
-    establish_db_connection(app)
-
-    app.config['DATABASE_CONNECTION'] = db_conn
+    insert_default_permissions_and_roles(app)
 
     # Setting up the template folders
     my_loader = jinja2.ChoiceLoader([

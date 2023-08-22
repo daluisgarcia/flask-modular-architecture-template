@@ -1,6 +1,6 @@
 from flask_login import LoginManager
 
-from core.auth.repositories.user_repository import UserRepository
+from core.auth.repositories import UserRepository
 
 
 def init_login_extension(app):

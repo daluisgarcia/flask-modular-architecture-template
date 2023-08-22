@@ -3,9 +3,21 @@ from core.auth.models import Permission, Role, User
 
 
 class RolesAndPermissionsRepository(AppRepository):
-    permission_names: list = ['manage_user_roles', 'enter_admin_panel']
+
+    def __init__(self, permission_names: set = None):
+        super().__init__()
+
+        if not permission_names:
+            permission_names = set()
+
+        self.permission_names = permission_names
 
     def insert_role(self, name: str, permissions: list):
+        role = Role.query.filter_by(name=name).first()
+
+        if role:
+            raise ValueError('Role already exists')
+
         role = Role(name=name)
 
         for permission_id in permissions:
@@ -29,19 +41,23 @@ class RolesAndPermissionsRepository(AppRepository):
         self.commit(user)
         self.close_session()
 
-    def insert_default_permissions(self):
-        for perm_name in self.permission_names:
-            permission = Permission.query.filter_by(name=perm_name).first()
-            if not permission:
+    def insert_admin_role_with_permissions(self, permissions_set: set):
+        """
+        Insert the default roles and permissions
+        :return:
+        """
+        for perm_name in permissions_set:
+            try:
                 permission = Permission(name=perm_name)
                 self.commit(permission)
+            except:
+                self.rollback()
 
-        permissions = Permission.query.all()
-        role = Role.query.filter_by(name='admin').first()
+        role = Role.query.filter_by(name='Admin').first()
         if not role:
-            role = Role(name='admin')
-        for permission in permissions:
-            role.permissions.append(permission)
+            role = Role(name='Admin')
+
+        role.permissions = Permission.query.all()
 
         self.commit(role)
         self.close_session()

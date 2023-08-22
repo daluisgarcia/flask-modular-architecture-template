@@ -4,11 +4,11 @@ from flask import (
 )
 from flask_login import login_required
 
-from core.permissions.permissions import EnterAdminPanelPermission
-from core.auth.repositories.user_repository import UserRepository
+from core.permissions.permissions import ManageRolesPermission
+from core.auth.repositories import UserRepository
 from core.permissions.forms import BindRolesWithUserForm, CreateRolesForm
-from core.auth.repositories.roles_perms_repository import RolesAndPermissionsRepository
-from admin.permissions import ManageRolesPermission
+from core.permissions.repositories import RolesAndPermissionsRepository
+from admin.permissions import EnterAdminPanelPermission
 
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -28,10 +28,8 @@ def admin_panel():
 @login_required
 @manage_role_permission.require(http_exception=403)
 def create_role():
-
     form = CreateRolesForm()
     form.permissions.choices = RolesAndPermissionsRepository.get_permissions_choices()
-
 
     if form.validate_on_submit():
         try:
@@ -41,6 +39,8 @@ def create_role():
             role_perm_repo.insert_role(name, permissions)
         except exc.IntegrityError:
             flash(f"Unexpected error.")
+        except ValueError:
+            flash(f"Role already exists.")
         else:
             return redirect(url_for("admin.bind_roles_with_user"))
 

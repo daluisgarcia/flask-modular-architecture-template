@@ -35,7 +35,3 @@ def establish_db_connection(app: Flask):
     """Creates the database connection and insert the default permissions"""
     with app.app_context():
         db.create_all()
-
-        # Inserting default permissions
-        from core.auth.repositories import RolesAndPermissionsRepository
-        RolesAndPermissionsRepository().insert_default_permissions()

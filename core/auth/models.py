@@ -22,9 +22,8 @@ class User(db.Model, UserMixin):
 
 class PermissionRole(db.Model):
     __tablename__ = 'permission_role'
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    permission_id = db.Column(db.Integer(), db.ForeignKey('permission.id', ondelete='CASCADE'))
-    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+    permission_id = db.Column(db.Integer(), db.ForeignKey('permission.id', ondelete='CASCADE'), primary_key=True)
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'), primary_key=True)
 
 
 # Define the Role data-model
