@@ -11,7 +11,9 @@ This template has some flask extension installed, such as: `flask_login`, `flask
 - `core/`: Core module of the application. This module contains the core code of the project and orchestrates the 
 features of the template. This module contains the base templates and the static folder, also the authentication 
 and permissions features. **BE CAREFUL WHEN EDITING THE CODE INSIDE THIS FOLDER, THIS ACTION CAN BREAK THE PROJECT**
-- `landing_page/`: An example module for the landing page. This folder contains the minimum code to create a module. 
+- `migrations`: Contains all the migrations of the database. **DO NOT MODIFY** Should be modified using the `flask-migrate` 
+extension commands defined later in this file.
+- `web_page/`: An example module for the landing page. This folder contains the minimum code to create a module. 
 **CAN BE EDITED OR DELETED**
 - `app.py`: Main file of the application. This file is the one that must be executed to run the application. **DO NOT MODIFY**
 - `modules.py`: File that contains a set with the modules of the application. Only modify to add new modules to the set.
