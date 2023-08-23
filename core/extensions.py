@@ -13,6 +13,8 @@ def install_extensions(app: Flask):
     init_permission_extension(app)
 
     # Flask-Migrate
+    from flask_migrate import Migrate
+    migrate = Migrate(app, app.config['DATABASE_CONNECTION'])
 
     # Flask-Security
 
